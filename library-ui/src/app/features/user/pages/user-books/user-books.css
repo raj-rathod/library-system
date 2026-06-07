@@ -1,0 +1,27 @@
+.header-wrapper{
+  border-radius: 20px;
+  padding: 10px 20px;
+  background-color: rgb(220, 234, 229);
+  height: 60px;
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+}
+table {
+  width: 100%;
+}
+
+.available {
+  color: green;
+  font-weight: 600;
+}
+
+.unavailable {
+  color: orange;
+  font-weight: 600;
+}
+
+.archived {
+  color: red;
+  font-weight: 600;
+}

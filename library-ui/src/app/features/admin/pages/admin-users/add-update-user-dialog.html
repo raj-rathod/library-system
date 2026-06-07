@@ -1,0 +1,69 @@
+<h2 mat-dialog-title>{{data.title}}</h2>
+<mat-dialog-content>
+    <form [formGroup]="userForm" (ngSubmit)="onSubmit()">
+
+        <mat-form-field appearance="outline" style="min-width:45%; margin-bottom: 15px; margin-top: 20px;">
+            <mat-label>Name</mat-label>
+            <input matInput formControlName="name">
+
+            <mat-error *ngIf="f['name'].hasError('required')">
+            Name is required
+            </mat-error>
+
+            <mat-error *ngIf="f['name'].hasError('minlength')">
+            Name must be at least 3 characters
+            </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" style="min-width:50%; margin-left: 15px;">
+            <mat-label>Email</mat-label>
+            <input
+            matInput
+            type="email"
+            formControlName="email">
+
+            <mat-error *ngIf="f['email'].hasError('required')">
+            Email is required
+            </mat-error>
+
+            <mat-error *ngIf="f['email'].hasError('email')">
+            Enter a valid email address
+            </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" style="min-width:45%;">
+            <mat-label>Password</mat-label>
+            <input
+            matInput
+            type="password"
+            formControlName="password">
+
+            <mat-error *ngIf="f['password'].hasError('required')">
+            Password is required
+            </mat-error>
+
+            <mat-error *ngIf="f['password'].hasError('minlength')">
+            Password must be at least 6 characters
+            </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" style="min-width:50%; margin-left: 15px;">
+            <mat-label>Role</mat-label>
+
+            <mat-select formControlName="role">
+            <mat-option *ngFor="let role of roles" [value]="role">
+                {{ role }}
+            </mat-option>
+            </mat-select>
+
+            <mat-error *ngIf="f['role'].hasError('required')">
+            Role is required
+            </mat-error>
+        </mat-form-field>
+
+</form>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button matButton  (click)="cancel()">Close</button>
+  <button matButton  (click)="onSubmit()">Save</button>
+</mat-dialog-actions>

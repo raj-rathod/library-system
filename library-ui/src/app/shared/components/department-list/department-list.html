@@ -1,0 +1,62 @@
+
+<div class="header-wrapper">
+     <h3>Departments</h3>
+    <button matButton="elevated" (click)="openDialog()"><mat-icon>add</mat-icon> Add Department</button>
+</div>
+
+<table mat-table [dataSource]="dataSource">
+
+  <ng-container matColumnDef="id">
+    <th mat-header-cell *matHeaderCellDef>ID</th>
+    <td mat-cell *matCellDef="let department">
+      {{ department.id }}
+    </td>
+  </ng-container>
+
+  <ng-container matColumnDef="name">
+    <th mat-header-cell *matHeaderCellDef>Name</th>
+    <td mat-cell *matCellDef="let department">
+      {{ department.name }}
+    </td>
+  </ng-container>
+
+  <ng-container matColumnDef="status">
+    <th mat-header-cell *matHeaderCellDef>Status</th>
+    <td mat-cell *matCellDef="let department">
+      {{ department.status }}
+    </td>
+  </ng-container>
+
+      <!-- Actions -->
+  <ng-container matColumnDef="actions">
+    <th mat-header-cell *matHeaderCellDef>Actions</th>
+
+    <td mat-cell *matCellDef="let department">
+      <button
+        mat-icon-button
+        [matMenuTriggerFor]="menu">
+        <mat-icon>more_vert</mat-icon>
+      </button>
+
+      <mat-menu #menu="matMenu">
+        <button
+          mat-menu-item
+          (click)="editDepartment(department)">
+          <mat-icon>edit</mat-icon>
+          <span>Edit Department</span>
+        </button>
+
+        <button
+          mat-menu-item
+          (click)="deleteDepartment(department)">
+          <mat-icon>delete</mat-icon>
+          <span>Delete Department</span>
+        </button>
+      </mat-menu>
+    </td>
+  </ng-container>
+
+  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+  <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+
+</table>

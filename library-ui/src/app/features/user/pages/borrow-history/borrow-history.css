@@ -1,0 +1,41 @@
+.header-wrapper{
+  border-radius: 20px;
+  padding: 10px 20px;
+  background-color: rgb(220, 234, 229);
+  height: 60px;
+  align-items: center;
+  display: flex;
+}
+table {
+  width: 100%;
+}
+
+.requested {
+  color: #ff9800; /* Orange */
+  font-weight: 600;
+}
+
+.approved {
+  color: #4caf50; /* Green */
+  font-weight: 600;
+}
+
+.borrowed {
+  color: #1976d2; /* Blue */
+  font-weight: 600;
+}
+
+.returned {
+  color: #2e7d32; /* Dark Green */
+  font-weight: 600;
+}
+
+.overdue {
+  color: #d32f2f; /* Red */
+  font-weight: 600;
+}
+
+.rejected {
+  color: #616161; /* Gray */
+  font-weight: 600;
+}

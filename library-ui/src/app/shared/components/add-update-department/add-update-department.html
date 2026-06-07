@@ -1,0 +1,35 @@
+<h2 mat-dialog-title>{{data.title}}</h2>
+<mat-dialog-content>
+    <form [formGroup]="deptForm" (ngSubmit)="onSubmit()">
+
+        <mat-form-field appearance="outline" style="min-width:45%; margin-bottom: 15px; margin-top: 20px;">
+            <mat-label>Department Name</mat-label>
+            <input matInput formControlName="name">
+
+            <mat-error *ngIf="f['name'].hasError('required')">
+            Department name is required
+            </mat-error>
+
+        </mat-form-field>
+
+         <mat-form-field appearance="outline" style="min-width:50%; margin-left: 15px;">
+            <mat-label>Status</mat-label>
+
+            <mat-select formControlName="status">
+            <mat-option *ngFor="let status of deptStatus" [value]="status">
+                {{ status }}
+            </mat-option>
+            </mat-select>
+
+            <mat-error *ngIf="f['status'].hasError('required')">
+            Status is required
+            </mat-error>
+        </mat-form-field>
+
+
+</form>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button matButton  (click)="cancel()">Close</button>
+  <button matButton  (click)="onSubmit()">Save</button>
+</mat-dialog-actions>

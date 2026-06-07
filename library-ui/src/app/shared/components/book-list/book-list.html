@@ -1,0 +1,119 @@
+
+<div class="header-wrapper">
+    <h3>Books</h3>
+          <button matButton="elevated" (click)="openDialog()"><mat-icon>add</mat-icon> Add Book</button>
+</div>
+
+<table mat-table [dataSource]="dataSource"
+       matSort
+       class="mat-elevation-z8">
+
+  <!-- ID -->
+  <ng-container matColumnDef="id">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header>
+      ID
+    </th>
+    <td mat-cell *matCellDef="let book">
+      {{ book.id }}
+    </td>
+  </ng-container>
+
+  <!-- Title -->
+  <ng-container matColumnDef="title">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header>
+      Title
+    </th>
+    <td mat-cell *matCellDef="let book">
+      {{ book.title }}
+    </td>
+  </ng-container>
+
+  <!-- Author -->
+  <ng-container matColumnDef="author">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header>
+      Author
+    </th>
+    <td mat-cell *matCellDef="let book">
+      {{ book.author }}
+    </td>
+  </ng-container>
+
+  <!-- ISBN -->
+  <ng-container matColumnDef="isbn">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header>
+      ISBN
+    </th>
+    <td mat-cell *matCellDef="let book">
+      {{ book.isbn }}
+    </td>
+  </ng-container>
+
+  <!-- Quantity -->
+  <ng-container matColumnDef="quantity">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header>
+      Quantity
+    </th>
+    <td mat-cell *matCellDef="let book">
+      {{ book.quantity }}
+    </td>
+  </ng-container>
+
+  <!-- Department -->
+  <ng-container matColumnDef="departmentName">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header>
+      Department
+    </th>
+    <td mat-cell *matCellDef="let book">
+      {{ book.departmentName }}
+    </td>
+  </ng-container>
+
+  <!-- Status -->
+  <ng-container matColumnDef="status">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header>
+      Status
+    </th>
+    <td mat-cell *matCellDef="let book">
+      <span
+        [class.available]="book.status === 'AVAILABLE'"
+        [class.unavailable]="book.status === 'UNAVAILABLE'"
+        [class.archived]="book.status === 'ARCHIVED'">
+        {{ book.status }}
+      </span>
+    </td>
+  </ng-container>
+
+      <!-- Actions -->
+  <ng-container matColumnDef="actions">
+    <th mat-header-cell *matHeaderCellDef>Actions</th>
+
+    <td mat-cell *matCellDef="let book">
+      <button
+        mat-icon-button
+        [matMenuTriggerFor]="menu">
+        <mat-icon>more_vert</mat-icon>
+      </button>
+
+      <mat-menu #menu="matMenu">
+        <button
+          mat-menu-item
+          (click)="editBook(book)">
+          <mat-icon>edit</mat-icon>
+          <span>Edit Book</span>
+        </button>
+
+        <button
+          mat-menu-item
+          (click)="deleteBook(book)">
+          <mat-icon>delete</mat-icon>
+          <span>Delete Book</span>
+        </button>
+      </mat-menu>
+    </td>
+  </ng-container>
+
+  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+
+  <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+</table>
