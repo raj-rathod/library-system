@@ -27,7 +27,7 @@ public class Borrow {
 
     private Long bookId;
 
-    private Long quantity;
+    private Integer quantity;
 
     private LocalDate borrowDate;
 

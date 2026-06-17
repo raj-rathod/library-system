@@ -30,6 +30,7 @@ export class BorrowedBookList {
     'id',
     'userId',
     'bookId',
+    'quantity',
     'borrowDate',
     'returnDate',
     'status',

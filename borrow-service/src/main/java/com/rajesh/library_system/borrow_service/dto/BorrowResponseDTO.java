@@ -15,7 +15,7 @@ public class BorrowResponseDTO {
 
     private Long bookId;
 
-    private Long quantity;
+    private Integer quantity;
 
     private LocalDate borrowDate;
 

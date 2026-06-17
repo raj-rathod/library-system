@@ -1,8 +1,10 @@
 package com.rajesh.library_system.borrow_service.service;
 
+import com.rajesh.library_system.borrow_service.dto.BorrowEvent;
 import com.rajesh.library_system.borrow_service.dto.BorrowRequestDTO;
 import com.rajesh.library_system.borrow_service.dto.BorrowResponseDTO;
 import com.rajesh.library_system.borrow_service.entity.Borrow;
+import com.rajesh.library_system.borrow_service.enums.BorrowStatus;
 import com.rajesh.library_system.borrow_service.mapper.BorrowMapper;
 import com.rajesh.library_system.borrow_service.repository.BorrowRepository;
 import com.rajesh.library_system.borrow_service.utils.SecurityUtil;
@@ -17,6 +19,7 @@ import java.util.stream.Collectors;
 public class BorrowService {
 
     private final BorrowRepository repo;
+    private final BorrowEventProducer producer;
 
     // CREATE
     public BorrowResponseDTO create(BorrowRequestDTO dto) {
@@ -27,6 +30,16 @@ public class BorrowService {
         System.out.println(borrow.toString());
 
         Borrow savedBorrow= repo.save(borrow);
+
+        producer.publish(
+                new BorrowEvent(
+                        "BORROW_REQUESTED",
+                        borrow.getId(),
+                        borrow.getUserId(),
+                        borrow.getBookId(),
+                        borrow.getQuantity()
+                )
+        );
 
         return BorrowMapper.toDTO(savedBorrow);
     }
@@ -55,6 +68,29 @@ public class BorrowService {
         borrow.setReturnDate(dto.getReturnDate());
         borrow.setStatus(dto.getStatus());
 
+        if(dto.getStatus() == BorrowStatus.REJECTED){
+            producer.publish(
+                    new BorrowEvent(
+                            "BORROW_REJECTED",
+                            borrow.getId(),
+                            borrow.getUserId(),
+                            borrow.getBookId(),
+                            borrow.getQuantity()
+                    )
+            );
+        }
+
+        if(dto.getStatus() == BorrowStatus.RETURNED){
+            producer.publish(
+                    new BorrowEvent(
+                            "BORROW_RETURNED",
+                            borrow.getId(),
+                            borrow.getUserId(),
+                            borrow.getBookId(),
+                            borrow.getQuantity()
+                    )
+            );
+        }
         return BorrowMapper.toDTO(repo.save(borrow));
     }
 
@@ -63,6 +99,22 @@ public class BorrowService {
         if (!repo.existsById(id)) {
             throw new RuntimeException("Borrow not found");
         }
+
+        Borrow borrow = repo.findById(id)
+                .orElseThrow(() -> new RuntimeException("Borrow not found"));
+
+        if(borrow.getStatus() == BorrowStatus.REQUESTED){
+            producer.publish(
+                    new BorrowEvent(
+                            "BORROW_DELETED",
+                            borrow.getId(),
+                            borrow.getUserId(),
+                            borrow.getBookId(),
+                            borrow.getQuantity()
+                    )
+            );
+        }
+
         repo.deleteById(id);
     }
 
