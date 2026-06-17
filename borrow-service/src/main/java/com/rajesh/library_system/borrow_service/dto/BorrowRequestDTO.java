@@ -13,7 +13,7 @@ public class BorrowRequestDTO {
     private Long bookId;
 
     @NotNull
-    private Long quantity;
+    private Integer quantity;
 
     @NotNull
     private LocalDate borrowDate;
