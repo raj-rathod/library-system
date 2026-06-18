@@ -1,0 +1,41 @@
+# Git
+.git
+.gitignore
+
+# IDE
+.idea
+.vscode
+*.iml
+.project
+.classpath
+.settings
+
+# Build output
+target
+build
+
+# Maven local repository (if present)
+.mvn
+
+# Logs
+*.log
+logs
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Docker
+Dockerfile
+docker-compose.yml
+
+# Environment files
+.env
+.env.*
+
+# Temporary files
+*.tmp
+*.swp
+
+# Documentation
+README.md
