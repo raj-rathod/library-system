@@ -3,6 +3,7 @@ package com.rajesh.library_system.library_service.config;
 import com.rajesh.library_system.library_service.dto.BorrowEvent;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.kafka.config.ConcurrentKafkaListenerContainerFactory;
@@ -15,6 +16,9 @@ import java.util.Map;
 
 @Configuration
 public class KafkaConsumerConfig {
+
+    @Value("${KAFKA_BOOTSTRAP_SERVERS:localhost:9092,localhost:9094,localhost:9095}")
+    private String bootstrapServers;
 
     @Bean
     public ConsumerFactory<String, BorrowEvent> consumerFactory() {
@@ -29,7 +33,7 @@ public class KafkaConsumerConfig {
 
         config.put(
                 ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG,
-                "localhost:9092,localhost:9094,localhost:9095"
+                bootstrapServers
         );
 
         config.put(
