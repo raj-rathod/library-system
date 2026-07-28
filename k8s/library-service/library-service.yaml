@@ -1,0 +1,71 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: library-service
+  namespace: default
+  labels:
+    app: library-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: library-service
+  template:
+    metadata:
+      labels:
+        app: library-service
+    spec:
+      containers:
+        - name: library-service
+          image: rajeshlibraryacr001.azurecr.io/library-service:v1
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8082
+          env:
+            - name: DB_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: shared-config
+                  key: DB_HOST
+            - name: DB_URL
+              value: "jdbc:postgresql://$(DB_HOST):5432/library-books?sslmode=require"
+            - name: KAFKA_BOOTSTRAP_SERVERS
+              valueFrom:
+                configMapKeyRef:
+                  name: shared-config
+                  key: KAFKA_BOOTSTRAP_SERVERS
+            - name: DB_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: shared-secrets
+                  key: DB_USERNAME
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: shared-secrets
+                  key: DB_PASSWORD
+          volumeMounts:
+            - name: secrets-store-inline
+              mountPath: "/mnt/secrets-store"
+              readOnly: true
+      volumes:
+        - name: secrets-store-inline
+          csi:
+            driver: secrets-store.csi.k8s.io
+            readOnly: true
+            volumeAttributes:
+              secretProviderClass: "azure-kv-shared-secrets"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: library-service
+  namespace: default
+spec:
+  type: ClusterIP
+  ports:
+    - port: 8082
+      targetPort: 8082
+  selector:
+    app: library-service
+

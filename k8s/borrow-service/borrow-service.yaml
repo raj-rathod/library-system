@@ -1,0 +1,70 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: borrow-service
+  namespace: default
+  labels:
+    app: borrow-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: borrow-service
+  template:
+    metadata:
+      labels:
+        app: borrow-service
+    spec:
+      containers:
+        - name: borrow-service
+          image: rajeshlibraryacr001.azurecr.io/borrow-service:v1
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8083
+          env:
+            - name: DB_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: shared-config
+                  key: DB_HOST
+            - name: DB_URL
+              value: "jdbc:postgresql://$(DB_HOST):5432/library-borrows?sslmode=require"
+            - name: KAFKA_BOOTSTRAP_SERVERS
+              valueFrom:
+                configMapKeyRef:
+                  name: shared-config
+                  key: KAFKA_BOOTSTRAP_SERVERS
+            - name: DB_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: shared-secrets
+                  key: DB_USERNAME
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: shared-secrets
+                  key: DB_PASSWORD
+          volumeMounts:
+            - name: secrets-store-inline
+              mountPath: "/mnt/secrets-store"
+              readOnly: true
+      volumes:
+        - name: secrets-store-inline
+          csi:
+            driver: secrets-store.csi.k8s.io
+            readOnly: true
+            volumeAttributes:
+              secretProviderClass: "azure-kv-shared-secrets"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: borrow-service
+  namespace: default
+spec:
+  type: ClusterIP
+  ports:
+    - port: 8083
+      targetPort: 8083
+  selector:
+    app: borrow-service
